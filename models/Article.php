@@ -41,6 +41,15 @@ class Article extends \yii\db\ActiveRecord
         ];
     }
 
+    public function extraFields()
+    {
+        return [
+            'time'=> function($model){
+                return  ($model->time) < strtotime(date('Y-m-d')) ? date('Y-m-d',$model->time) : date('H:i:s',$model->time);
+            },
+       ];
+    }
+
     /**
      * @inheritdoc
      */
