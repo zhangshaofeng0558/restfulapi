@@ -38,7 +38,6 @@ class ArticleController extends ActiveController
         ]);
     }
 
-
     public function actions()
     {
         $actions =  parent::actions();
@@ -63,7 +62,7 @@ class ArticleController extends ActiveController
     public function prepareDataProvider()
     {
         $provider = new ActiveDataProvider([
-            'query' => Article::find(),
+            'query' => Article::find()->where(['state'=>0])->orderBy('id DESC' ),
             'pagination' => [
                 'pageSize' => 5,
             ],
@@ -99,8 +98,9 @@ class ArticleController extends ActiveController
         if (($model = Article::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 
 }
