@@ -67,10 +67,18 @@ class ArticleController extends ActiveController
         }
     }
 
+
     public function prepareDataProvider()
     {
+        //判断blog前后端访问
+        $isBack = Yii::$app->request->get('back');
+        if($isBack == 1){
+            $query = Article::find()->orderBy('id DESC' );
+        }else{
+            $query = Article::find()->where(['state'=>0])->orderBy('id DESC' );
+        }
         $provider = new ActiveDataProvider([
-            'query' => Article::find()->where(['state'=>0])->orderBy('id DESC' ),
+            'query' => $query,
             'pagination' => [
                 'pageSize' => 5,
             ],
@@ -87,7 +95,8 @@ class ArticleController extends ActiveController
             throw new \yii\web\ForbiddenHttpException('You can\'t delete this article.');
         }
 
-        $model->state = 1;
+        $state = $model->state;
+        $model->state = $state ? 0 : 1;
         $model->time= time();
         $model->save(false);
 
